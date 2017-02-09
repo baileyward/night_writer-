@@ -8,6 +8,7 @@ class NightWriter
 
   def lookup(character, position)
     @alphabet.braille_letter_hash[character].chars[position]
+    #require "pry"; binding.pry
   end
 
   def encode_to_braille(plain)
@@ -28,17 +29,17 @@ class NightWriter
   def encode_from_braille(braille)
     lines = braille.split("\n")
     n = lines[0].length
-    m = lines.length
+    m = 3
     as_one_line = lines.join
     output = []
     should_capitalize_next = false
 
-    (0..(n-1)).each_slice(2) do |character_offset|
+    (0..(n-1)).each_slice(2) do |column_offset|
 
       braille_character = []
-      (0..(m-1)).each do |line_offset|
-        braille_character << as_one_line[(line_offset * n) + character_offset[0]]
-        braille_character << as_one_line[(line_offset * n) + character_offset[1]]
+      (0..(m-1)).each do |row_offset|
+        braille_character << as_one_line[(row_offset * n) + column_offset[0]]
+        braille_character << as_one_line[(row_offset * n) + column_offset[1]]
       end
 
       decoded_braille = @alphabet.braille_letter_hash.key(braille_character.join)
